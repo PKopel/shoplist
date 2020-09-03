@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ShopList</string>
+    <string name="tab_small">Mały sklep</string>
+    <string name="tab_market">Market</string>
+    <string name="tab_special">Specjalne</string>
+    <string name="name_label">Nazwa</string>
+    <string name="qty_label">Ilość</string>
+    <string name="add_button">Dodaj</string>
+</resources>

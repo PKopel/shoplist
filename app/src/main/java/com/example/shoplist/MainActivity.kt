@@ -3,6 +3,8 @@ package com.example.shoplist
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
+import com.example.shoplist.model.Item
+import com.example.shoplist.model.mock
 import com.example.shoplist.ui.main.AddDialogFragment
 import com.example.shoplist.ui.main.SectionsPagerAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -26,9 +28,10 @@ class MainActivity : AppCompatActivity() {
             AddDialogFragment().show(supportFragmentManager, "add_item")
         }
 
-        fabRm.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        fabRm.setOnClickListener {
+            mock.removeIf(Item::checked)
+            Snackbar.make(it, resources.getText(R.string.remove_info), Snackbar.LENGTH_LONG)
+                .setAction("Remove checked", null).show()
         }
     }
 }

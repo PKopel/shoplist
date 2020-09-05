@@ -7,4 +7,5 @@
     <string name="qty_label">Ilość</string>
     <string name="add_button">Dodaj</string>
     <string name="cancel_button">Anuluj</string>
+    <string name="remove_info">Usunięto oznaczone pozycje</string>
 </resources>

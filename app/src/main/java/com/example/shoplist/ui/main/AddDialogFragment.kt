@@ -16,12 +16,13 @@ class AddDialogFragment : DialogFragment() {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
             val inflater = requireActivity().layoutInflater
-            builder.setView(inflater.inflate(R.layout.item_form, null))
+            val view = inflater.inflate(R.layout.item_form, null)
+            builder.setView(view)
                 .setPositiveButton(R.string.add_button) { dialog, id ->
-                    val nameView = view?.findViewById<TextView>(R.id.item_form_name)
-                    val qtyView = view?.findViewById<TextView>(R.id.item_form_qty)
-                    val name = nameView?.text.toString()
-                    val qty = Integer.parseInt(qtyView?.text.toString())
+                    val nameView = view.findViewById<TextView>(R.id.item_form_name)
+                    val qtyView = view.findViewById<TextView>(R.id.item_form_qty)
+                    val name = nameView.text.toString()
+                    val qty = Integer.parseInt(qtyView.text.toString())
                     mock.add(Item(name, qty, Shop.Small, Calendar.getInstance().time, false))
                 }
                 .setNegativeButton(R.string.cancel_button) { _, _ -> dialog?.cancel() }

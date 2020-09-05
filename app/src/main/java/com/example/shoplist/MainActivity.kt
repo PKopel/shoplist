@@ -2,6 +2,7 @@ package com.example.shoplist
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.shoplist.model.Item
 import com.example.shoplist.model.mock
@@ -25,11 +26,13 @@ class MainActivity : AppCompatActivity() {
         val fabRm: FloatingActionButton = findViewById(R.id.fab_remove)
 
         fabAdd.setOnClickListener {
-            AddDialogFragment().show(supportFragmentManager, "add_item")
+            AddDialogFragment(viewPager.currentItem).show(supportFragmentManager, "add_item")
+            findViewById<RecyclerView>(R.id.item_list).adapter?.notifyDataSetChanged()
         }
 
         fabRm.setOnClickListener {
             mock.removeIf(Item::checked)
+            findViewById<RecyclerView>(R.id.item_list).adapter?.notifyDataSetChanged()
             Snackbar.make(it, resources.getText(R.string.remove_info), Snackbar.LENGTH_LONG)
                 .setAction("Remove checked", null).show()
         }

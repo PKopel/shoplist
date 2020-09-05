@@ -11,19 +11,27 @@ import com.example.shoplist.model.Shop
 import com.example.shoplist.model.mock
 import java.util.*
 
-class AddDialogFragment : DialogFragment() {
+class AddDialogFragment(private val position: Int) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
             val inflater = requireActivity().layoutInflater
             val view = inflater.inflate(R.layout.item_form, null)
             builder.setView(view)
-                .setPositiveButton(R.string.add_button) { dialog, id ->
+                .setPositiveButton(R.string.add_button) { _, _ ->
                     val nameView = view.findViewById<TextView>(R.id.item_form_name)
                     val qtyView = view.findViewById<TextView>(R.id.item_form_qty)
                     val name = nameView.text.toString()
                     val qty = Integer.parseInt(qtyView.text.toString())
-                    mock.add(Item(name, qty, Shop.Small, Calendar.getInstance().time, false))
+                    mock.add(
+                        Item(
+                            name,
+                            qty,
+                            Shop.values()[position],
+                            Calendar.getInstance().time,
+                            false
+                        )
+                    )
                 }
                 .setNegativeButton(R.string.cancel_button) { _, _ -> dialog?.cancel() }
             builder.create()

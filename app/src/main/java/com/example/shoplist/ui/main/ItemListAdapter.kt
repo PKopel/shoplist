@@ -21,16 +21,16 @@ class ItemListAdapter(private val shop: Shop) :
     }
 
     override fun onBindViewHolder(holder: ItemListViewHolder, position: Int) {
-        val item = mock[position]
+        val item = mock.filter { it.shop == shop }[position]
         with(holder) {
             name.text = item.name
             qty.text = item.qty.toString()
             checkBox.isChecked = item.checked
+            checkBox.setOnCheckedChangeListener { _, _ -> item.checked = checkBox.isChecked }
         }
     }
 
-    override fun getItemCount(): Int = mock.size
-
+    override fun getItemCount(): Int = mock.filter { it.shop == shop }.size
 
     class ItemListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val view: CardView = itemView.findViewById(R.id.item_wrapper)

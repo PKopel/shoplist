@@ -3,6 +3,7 @@ package com.example.shoplist
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
+import com.example.shoplist.ui.main.AddDialogFragment
 import com.example.shoplist.ui.main.SectionsPagerAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -21,9 +22,8 @@ class MainActivity : AppCompatActivity() {
         val fabAdd: FloatingActionButton = findViewById(R.id.fab_add)
         val fabRm: FloatingActionButton = findViewById(R.id.fab_remove)
 
-        fabAdd.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        fabAdd.setOnClickListener {
+            AddDialogFragment().show(supportFragmentManager, "add_item")
         }
 
         fabRm.setOnClickListener { view ->

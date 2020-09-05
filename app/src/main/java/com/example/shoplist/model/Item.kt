@@ -9,3 +9,10 @@ data class Item(
     val orderDate: Date,
     var checked: Boolean
 )
+
+val mock = arrayListOf(
+    Item("chleb", 1, Shop.Small, Date(0), false),
+    Item("masło", 1, Shop.Market, Date(1), false),
+    Item("dżem", 1, Shop.Small, Date(2), false),
+    Item("ser", 2, Shop.Special, Date(3), false)
+)

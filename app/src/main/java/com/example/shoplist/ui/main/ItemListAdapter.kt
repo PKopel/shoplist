@@ -8,19 +8,11 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.R
-import com.example.shoplist.model.Item
 import com.example.shoplist.model.Shop
-import java.util.*
+import com.example.shoplist.model.mock
 
 class ItemListAdapter(private val shop: Shop) :
     RecyclerView.Adapter<ItemListAdapter.ItemListViewHolder>() {
-
-    private val mock = arrayOf(
-        Item("chleb", 1, Shop.Small, Date(0), false),
-        Item("masło", 1, Shop.Market, Date(1), false),
-        Item("dżem", 1, Shop.Small, Date(2), false),
-        Item("ser", 2, Shop.Special, Date(3), false)
-    )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemListViewHolder {
         val view = LayoutInflater.from(parent.context)

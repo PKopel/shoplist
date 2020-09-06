@@ -25,6 +25,7 @@ class ItemListAdapter(private val shop: Shop) :
         with(holder) {
             name.text = item.name
             qty.text = item.qty.toString()
+            checkBox.setOnCheckedChangeListener(null)
             checkBox.isChecked = item.checked
             checkBox.setOnCheckedChangeListener { _, _ -> item.checked = checkBox.isChecked }
         }

@@ -1,6 +1,8 @@
 package com.example.shoplist
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
@@ -17,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(findViewById(R.id.toolbar))
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
         val viewPager: ViewPager = findViewById(R.id.view_pager)
         viewPager.adapter = sectionsPagerAdapter
@@ -33,8 +36,35 @@ class MainActivity : AppCompatActivity() {
         fabRm.setOnClickListener {
             mock.removeIf(Item::checked)
             findViewById<RecyclerView>(R.id.item_list).adapter?.notifyDataSetChanged()
-            Snackbar.make(it, resources.getText(R.string.remove_info), Snackbar.LENGTH_LONG)
+            Snackbar.make(it, R.string.remove_info, Snackbar.LENGTH_LONG)
                 .setAction("Remove checked", null).show()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_action_bar, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.action_settings -> {
+            // User chose the "Settings" item, show the app settings UI...
+            true
+        }
+
+        R.id.action_remove -> {
+            mock.removeIf(Item::checked)
+            val recycler = findViewById<RecyclerView>(R.id.item_list)
+            recycler.adapter?.notifyDataSetChanged()
+            Snackbar.make(recycler, resources.getText(R.string.remove_info), Snackbar.LENGTH_LONG)
+                .setAction("Remove checked", null).show()
+            true
+        }
+
+        else -> {
+            // If we got here, the user's action was not recognized.
+            // Invoke the superclass to handle it.
+            super.onOptionsItemSelected(item)
         }
     }
 }

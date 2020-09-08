@@ -8,8 +8,8 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.R
-import com.example.shoplist.model.Shop
-import com.example.shoplist.model.mock
+import com.example.shoplist.data.model.items.Shop
+import com.example.shoplist.data.model.items.mock
 
 class ItemListAdapter(private val shop: Shop) :
     RecyclerView.Adapter<ItemListAdapter.ItemListViewHolder>() {

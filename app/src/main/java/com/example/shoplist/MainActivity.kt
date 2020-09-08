@@ -1,20 +1,39 @@
 package com.example.shoplist
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
-import com.example.shoplist.model.Item
-import com.example.shoplist.model.mock
+import com.example.shoplist.data.model.items.Item
+import com.example.shoplist.data.model.items.mock
+import com.example.shoplist.ui.login.LoginActivity
 import com.example.shoplist.ui.main.AddDialogFragment
 import com.example.shoplist.ui.main.SectionsPagerAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import io.realm.mongodb.User
 
 class MainActivity : AppCompatActivity() {
+
+    private var user: User? = null
+
+    override fun onStart() {
+        super.onStart()
+        try {
+            user = shopListApp.currentUser()
+        } catch (e: IllegalStateException) {
+            Log.w(TAG(), e)
+        }
+        if (user == null) {
+            // if no user is currently logged in, start the login activity so the user can authenticate
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

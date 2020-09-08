@@ -1,4 +1,4 @@
-package com.example.shoplist.model
+package com.example.shoplist.data.model.items
 
 import com.example.shoplist.R
 

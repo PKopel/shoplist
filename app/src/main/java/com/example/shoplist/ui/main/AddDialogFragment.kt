@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.example.shoplist.R
-import com.example.shoplist.model.Item
-import com.example.shoplist.model.Shop
-import com.example.shoplist.model.mock
+import com.example.shoplist.data.model.items.Item
+import com.example.shoplist.data.model.items.Shop
+import com.example.shoplist.data.model.items.mock
 import java.util.*
 
 class AddDialogFragment(private val position: Int) : DialogFragment() {

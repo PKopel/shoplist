@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.R
-import com.example.shoplist.model.Shop
+import com.example.shoplist.data.model.items.Shop
 
 /**
  * A fragment containing list of items.

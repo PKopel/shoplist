@@ -20,10 +20,9 @@ import io.realm.mongodb.User
 
 class ShopListActivity : AppCompatActivity() {
 
-    private var user: User? = null
-
     override fun onStart() {
         super.onStart()
+        var user: User? = null
         try {
             user = shopListApp.currentUser()
         } catch (e: IllegalStateException) {
@@ -77,6 +76,14 @@ class ShopListActivity : AppCompatActivity() {
             recycler.adapter?.notifyDataSetChanged()
             Snackbar.make(recycler, resources.getText(R.string.remove_info), Snackbar.LENGTH_LONG)
                 .setAction("Remove checked", null).show()
+            true
+        }
+
+        R.id.action_log_out -> {
+            shopListApp.currentUser()?.logOutAsync {
+                if (it.isSuccess)
+                    startActivity(Intent(this, LoginActivity::class.java))
+            }
             true
         }
 

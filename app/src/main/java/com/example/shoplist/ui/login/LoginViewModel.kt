@@ -18,14 +18,18 @@ class LoginViewModel : ViewModel() {
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
-    fun login(username: String, password: String) {
-        val credentials = Credentials.emailPassword(username, password)
+    fun register(username: String, password: String) {
         shopListApp.emailPasswordAuth.registerUserAsync(username, password) {
             if (!it.isSuccess) {
-                _loginResult.value = LoginResult(error = R.string.login_failed)
+                _loginResult.value = LoginResult(error = R.string.registration_failed)
                 Log.e(TAG(), "Error: ${it.error}")
             }
         }
+        login(username, password)
+    }
+
+    fun login(username: String, password: String) {
+        val credentials = Credentials.emailPassword(username, password)
         shopListApp.loginAsync(credentials) {
             if (!it.isSuccess) {
                 _loginResult.value = LoginResult(error = R.string.login_failed)

@@ -18,7 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import io.realm.mongodb.User
 
-class MainActivity : AppCompatActivity() {
+class ShopListActivity : AppCompatActivity() {
 
     private var user: User? = null
 
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_shop_list)
         setSupportActionBar(findViewById(R.id.toolbar))
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
         val viewPager: ViewPager = findViewById(R.id.view_pager)

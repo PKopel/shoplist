@@ -16,7 +16,9 @@ import io.realm.kotlin.where
 /**
  * A fragment containing list of items.
  */
-class ItemListFragment(private val realm: Realm) : Fragment() {
+class ItemListFragment : Fragment() {
+
+    private val realm: Realm = Realm.getDefaultInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,13 +30,18 @@ class ItemListFragment(private val realm: Realm) : Fragment() {
                 layoutManager = LinearLayoutManager(context)
                 adapter = ItemListAdapter(
                     realm.where<Item>()
-                        .equalTo("shop", Shop.values()[arguments?.getInt(ARG_SHOP_TYPE) ?: 0].name)
+                        .equalTo("_shop", Shop.values()[arguments?.getInt(ARG_SHOP_TYPE) ?: 0].name)
                         .equalTo("removed", false)
                         .findAll()
                 )
             }
         }
         return view
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        realm.close()
     }
 
     companion object {
@@ -49,8 +56,8 @@ class ItemListFragment(private val realm: Realm) : Fragment() {
          * number.
          */
         @JvmStatic
-        fun newInstance(realm: Realm, sectionShop: Int): ItemListFragment {
-            return ItemListFragment(realm).apply {
+        fun newInstance(sectionShop: Int): ItemListFragment {
+            return ItemListFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_SHOP_TYPE, sectionShop)
                 }

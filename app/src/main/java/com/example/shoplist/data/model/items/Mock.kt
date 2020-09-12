@@ -1,5 +1,5 @@
 package com.example.shoplist.data.model.items
-
+/*
 val mock = arrayListOf(
     Item(
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, etc.",
@@ -52,3 +52,5 @@ val mock = arrayListOf(
     Item("dżem", 1, Shop.Small, true),
     Item("ser", 2, Shop.Special, false)
 )
+
+ */

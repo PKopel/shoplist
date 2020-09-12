@@ -52,7 +52,7 @@ class ShopListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shop_list)
         setSupportActionBar(findViewById(R.id.toolbar))
-        val sectionsPagerAdapter = SectionsPagerAdapter(realm, this, supportFragmentManager)
+        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
         val viewPager: ViewPager = findViewById(R.id.view_pager)
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = findViewById(R.id.tabs)

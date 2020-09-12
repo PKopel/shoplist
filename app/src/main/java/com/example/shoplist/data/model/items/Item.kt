@@ -6,9 +6,9 @@ import io.realm.annotations.Required
 import org.bson.types.ObjectId
 
 open class Item(
-    @Required var name: String,
-    @Required var qty: Int,
-    @Required var shop: Shop,
+    @Required var name: String = "Item",
+    shop: Shop = Shop.Small,
+    var qty: Int = 0,
     var checked: Boolean = false,
     var removed: Boolean = false
 ) : RealmObject() {
@@ -16,5 +16,8 @@ open class Item(
     var _id: ObjectId = ObjectId()
 
     @Required
-    var partition: String = "todo"
+    var _partition: String = "todo"
+
+    @Required
+    private var _shop = shop.name
 }

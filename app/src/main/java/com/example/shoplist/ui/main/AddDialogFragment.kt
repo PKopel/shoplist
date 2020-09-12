@@ -26,8 +26,8 @@ class AddDialogFragment(private val realm: Realm, private val position: Int) : D
                         realm.insert(
                             Item(
                                 name,
-                                qty,
-                                Shop.values()[position]
+                                Shop.values()[position],
+                                qty
                             )
                         )
                     }

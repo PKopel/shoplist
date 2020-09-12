@@ -5,6 +5,7 @@
     <string name="tab_special">Specjalne</string>
     <string name="name_label">Nazwa</string>
     <string name="qty_label">Ilość</string>
+    <string name="new_item">Nowa pozycja</string>
     <string name="action_settings">Ustawienia</string>
     <string name="action_search">Szukaj</string>
     <string name="action_remove">Usuń oznaczone pozycje</string>

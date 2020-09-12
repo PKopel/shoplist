@@ -8,12 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.R
+import com.example.shoplist.data.model.items.Item
 import com.example.shoplist.data.model.items.Shop
+import io.realm.Realm
+import io.realm.kotlin.where
 
 /**
  * A fragment containing list of items.
  */
-class ItemListFragment : Fragment() {
+class ItemListFragment(private val realm: Realm) : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,7 +26,12 @@ class ItemListFragment : Fragment() {
         if (view is RecyclerView) {
             with(view) {
                 layoutManager = LinearLayoutManager(context)
-                adapter = ItemListAdapter(Shop.values()[arguments?.getInt(ARG_SHOP_TYPE) ?: 0])
+                adapter = ItemListAdapter(
+                    realm.where<Item>()
+                        .equalTo("shop", Shop.values()[arguments?.getInt(ARG_SHOP_TYPE) ?: 0].name)
+                        .equalTo("removed", false)
+                        .findAll()
+                )
             }
         }
         return view
@@ -41,8 +49,8 @@ class ItemListFragment : Fragment() {
          * number.
          */
         @JvmStatic
-        fun newInstance(sectionShop: Int): ItemListFragment {
-            return ItemListFragment().apply {
+        fun newInstance(realm: Realm, sectionShop: Int): ItemListFragment {
+            return ItemListFragment(realm).apply {
                 arguments = Bundle().apply {
                     putInt(ARG_SHOP_TYPE, sectionShop)
                 }

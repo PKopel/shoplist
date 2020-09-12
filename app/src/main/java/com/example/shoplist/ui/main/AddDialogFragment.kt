@@ -8,10 +8,9 @@ import androidx.fragment.app.DialogFragment
 import com.example.shoplist.R
 import com.example.shoplist.data.model.items.Item
 import com.example.shoplist.data.model.items.Shop
-import com.example.shoplist.data.model.items.mock
-import java.util.*
+import io.realm.Realm
 
-class AddDialogFragment(private val position: Int) : DialogFragment() {
+class AddDialogFragment(private val realm: Realm, private val position: Int) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
@@ -23,18 +22,18 @@ class AddDialogFragment(private val position: Int) : DialogFragment() {
                     val qtyView = view.findViewById<TextView>(R.id.item_form_qty)
                     val name = nameView.text.toString()
                     val qty = Integer.parseInt(qtyView.text.toString())
-                    mock.add(
-                        Item(
-                            name,
-                            qty,
-                            Shop.values()[position],
-                            Calendar.getInstance().time,
-                            false
+                    realm.executeTransactionAsync { realm ->
+                        realm.insert(
+                            Item(
+                                name,
+                                qty,
+                                Shop.values()[position]
+                            )
                         )
-                    )
+                    }
                 }
                 .setNegativeButton(R.string.cancel_button) { _, _ -> dialog?.cancel() }
-            builder.create()
+            builder.create().apply { setTitle(R.string.new_item) }
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 }

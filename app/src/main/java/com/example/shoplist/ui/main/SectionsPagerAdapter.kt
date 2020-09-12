@@ -5,19 +5,23 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.example.shoplist.data.model.items.Shop
+import io.realm.Realm
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
 @Suppress("DEPRECATION")
-class SectionsPagerAdapter(private val context: Context, fm: FragmentManager)
-    : FragmentPagerAdapter(fm) {
+class SectionsPagerAdapter(
+    private val realm: Realm,
+    private val context: Context,
+    fm: FragmentManager
+) : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        return ItemListFragment.newInstance(position)
+        return ItemListFragment.newInstance(realm, position)
     }
 
     override fun getPageTitle(position: Int): CharSequence? {

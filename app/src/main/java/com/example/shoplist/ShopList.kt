@@ -13,10 +13,11 @@ lateinit var shopListApp: App
 
 // global Kotlin extension that resolves to the short version
 // of the name of the current class. Used for labelling logs.
+@Suppress("FunctionName", "unused")
 inline fun <reified T> T.TAG(): String = T::class.java.simpleName
 
 /*
-* TaskTracker: Sets up the taskApp Realm App and enables Realm-specific logging in debug mode.
+* ShopList: Sets up the shopListApp Realm App and enables Realm-specific logging in debug mode.
 */
 class ShopList : Application() {
 

@@ -1,65 +1,20 @@
 package com.example.shoplist.data.model.items
 
-import java.util.*
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
+import io.realm.annotations.Required
+import org.bson.types.ObjectId
 
-data class Item(
-    val name: String,
-    val qty: Int,
-    val shop: Shop,
-    val orderDate: Date,
-    var checked: Boolean
-)
+open class Item(
+    @Required var name: String,
+    @Required var qty: Int,
+    @Required var shop: Shop,
+    var checked: Boolean = false,
+    var removed: Boolean = false
+) : RealmObject() {
+    @PrimaryKey
+    var _id: ObjectId = ObjectId()
 
-val mock = arrayListOf(
-    Item(
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, etc.",
-        12345,
-        Shop.Small,
-        Date(0),
-        false
-    ),
-    Item("masło", 1, Shop.Market, Date(1), false),
-    Item("dżem", 1, Shop.Small, Date(2), true),
-    Item("ser", 2, Shop.Special, Date(3), false),
-    Item("chleb", 1, Shop.Small, Date(0), false),
-    Item("masło", 1, Shop.Market, Date(1), false),
-    Item("dżem", 1, Shop.Small, Date(2), true),
-    Item("ser", 2, Shop.Special, Date(3), false),
-    Item("chleb", 1, Shop.Small, Date(0), false),
-    Item("masło", 1, Shop.Market, Date(1), false),
-    Item("dżem", 1, Shop.Small, Date(2), true),
-    Item("ser", 2, Shop.Special, Date(3), false),
-    Item("chleb", 1, Shop.Small, Date(0), false),
-    Item("masło", 1, Shop.Market, Date(1), false),
-    Item("dżem", 1, Shop.Small, Date(2), true),
-    Item("ser", 2, Shop.Special, Date(3), false),
-    Item("chleb", 1, Shop.Small, Date(0), false),
-    Item("masło", 1, Shop.Market, Date(1), false),
-    Item("dżem", 1, Shop.Small, Date(2), true),
-    Item("ser", 2, Shop.Special, Date(3), false),
-    Item("chleb", 1, Shop.Small, Date(0), false),
-    Item("masło", 1, Shop.Market, Date(1), false),
-    Item("dżem", 1, Shop.Small, Date(2), true),
-    Item("ser", 2, Shop.Special, Date(3), false),
-    Item("chleb", 1, Shop.Small, Date(0), false),
-    Item("masło", 1, Shop.Market, Date(1), false),
-    Item("dżem", 1, Shop.Small, Date(2), true),
-    Item("ser", 2, Shop.Special, Date(3), false),
-    Item("chleb", 1, Shop.Small, Date(0), false),
-    Item("masło", 1, Shop.Market, Date(1), false),
-    Item("dżem", 1, Shop.Small, Date(2), true),
-    Item("ser", 2, Shop.Special, Date(3), false),
-    Item("ser", 2, Shop.Special, Date(3), false),
-    Item("chleb", 1, Shop.Small, Date(0), false),
-    Item("masło", 1, Shop.Market, Date(1), false),
-    Item("dżem", 1, Shop.Small, Date(2), true),
-    Item("ser", 2, Shop.Special, Date(3), false),
-    Item("chleb", 1, Shop.Small, Date(0), false),
-    Item("masło", 1, Shop.Market, Date(1), false),
-    Item("dżem", 1, Shop.Small, Date(2), true),
-    Item("ser", 2, Shop.Special, Date(3), false),
-    Item("chleb", 1, Shop.Small, Date(0), false),
-    Item("masło", 1, Shop.Market, Date(1), false),
-    Item("dżem", 1, Shop.Small, Date(2), true),
-    Item("ser", 2, Shop.Special, Date(3), false)
-)
+    @Required
+    var partition: String = "todo"
+}

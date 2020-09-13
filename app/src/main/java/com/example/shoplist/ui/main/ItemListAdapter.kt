@@ -30,14 +30,21 @@ class ItemListAdapter(data: OrderedRealmCollection<Item>) :
             qty.text = data?.qty.toString()
             checkBox.setOnCheckedChangeListener(null)
             checkBox.isChecked = data?.checked ?: false
-            checkBox.setOnCheckedChangeListener { _, _ -> data?.checked = checkBox.isChecked }
+            checkBox.setOnCheckedChangeListener { _, _ ->
+                val bgRealm = Realm.getDefaultInstance()
+                bgRealm!!.executeTransaction {
+                    data?.checked = checkBox.isChecked
+                }
+                bgRealm.close()
+            }
             itemView.setOnClickListener {
                 run {
                     val popup = PopupMenu(holder.itemView.context, holder.view)
+                    popup.gravity = Gravity.END
                     val menu = popup.menu
 
                     val deleteCode = -1
-                    menu.add(0, deleteCode, Menu.NONE, "Delete Task")
+                    menu.add(0, deleteCode, Menu.NONE, R.string.remove)
 
                     popup.setOnMenuItemClickListener { item: MenuItem? ->
                         when (item!!.itemId) {

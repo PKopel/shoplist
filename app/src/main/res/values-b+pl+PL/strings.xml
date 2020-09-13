@@ -12,6 +12,7 @@
     <string name="add_button">Dodaj</string>
     <string name="cancel_button">Anuluj</string>
     <string name="remove_info">Usunięto oznaczone pozycje</string>
+    <string name="remove">Usuń pozycję</string>
     <string name="prompt_password">Hasło</string>
     <string name="action_register">Rejestracja</string>
     <string name="action_sign_in">Logowanie</string>

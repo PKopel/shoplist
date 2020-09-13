@@ -12,6 +12,7 @@
     <string name="add_button">Add</string>
     <string name="cancel_button">Cancel</string>
     <string name="remove_info">Removed checked items</string>
+    <string name="remove">Remove item</string>
     <string name="title_activity_login" translatable="false">LoginActivity</string>
     <string name="prompt_email" translatable="false">Email</string>
     <string name="prompt_password">Password</string>

@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.R
-import com.example.shoplist.data.model.items.Item
-import com.example.shoplist.data.model.items.Shop
+import com.example.shoplist.data.model.Item
+import com.example.shoplist.data.model.Shop
 import io.realm.Realm
 import io.realm.kotlin.where
 
@@ -30,8 +30,8 @@ class ItemListFragment : Fragment() {
                 layoutManager = LinearLayoutManager(context)
                 adapter = ItemListAdapter(
                     realm.where<Item>()
-                        .equalTo("_shop", Shop.values()[arguments?.getInt(ARG_SHOP_TYPE) ?: 0].name)
-                        .equalTo("removed", false)
+                        .equalTo("shop", Shop.values()[arguments?.getInt(ARG_SHOP_TYPE) ?: 0].name)
+                        //.equalTo("removed", false)
                         .findAll()
                 )
             }

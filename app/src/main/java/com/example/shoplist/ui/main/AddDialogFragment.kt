@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.example.shoplist.R
-import com.example.shoplist.data.model.items.Item
-import com.example.shoplist.data.model.items.Shop
+import com.example.shoplist.data.model.Item
+import com.example.shoplist.data.model.Shop
 import io.realm.Realm
 
 class AddDialogFragment(private val realm: Realm, private val position: Int) : DialogFragment() {
@@ -25,9 +25,9 @@ class AddDialogFragment(private val realm: Realm, private val position: Int) : D
                     realm.executeTransactionAsync { realm ->
                         realm.insert(
                             Item(
-                                name,
-                                Shop.values()[position],
-                                qty
+                                name = name,
+                                shop = Shop.values()[position].name,
+                                qty = qty
                             )
                         )
                     }

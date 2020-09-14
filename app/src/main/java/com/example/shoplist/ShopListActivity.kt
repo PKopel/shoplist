@@ -8,7 +8,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
-import com.example.shoplist.data.model.items.Item
+import com.example.shoplist.data.model.Item
 import com.example.shoplist.ui.login.LoginActivity
 import com.example.shoplist.ui.main.AddDialogFragment
 import com.example.shoplist.ui.main.SectionsPagerAdapter
@@ -90,7 +90,7 @@ class ShopListActivity : AppCompatActivity() {
         R.id.action_remove -> {
             realm.executeTransaction { realm ->
                 val itemsToRemove = realm.where<Item>().equalTo("checked", true).findAll()
-                itemsToRemove.setBoolean("removed", true)
+                itemsToRemove.deleteAllFromRealm()//.setBoolean("removed", true)
             }
             val recycler = findViewById<RecyclerView>(R.id.item_list)
             recycler.adapter?.notifyDataSetChanged()

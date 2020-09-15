@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.R
 import com.example.shoplist.data.model.Item
 import com.example.shoplist.data.model.Shop
@@ -31,6 +32,7 @@ class AddDialogFragment(private val realm: Realm, private val position: Int) : D
                             )
                         )
                     }
+                    it.findViewById<RecyclerView>(R.id.item_list).adapter?.notifyDataSetChanged()
                 }
                 .setNegativeButton(R.string.cancel_button) { _, _ -> dialog?.cancel() }
             builder.create().apply { setTitle(R.string.new_item) }

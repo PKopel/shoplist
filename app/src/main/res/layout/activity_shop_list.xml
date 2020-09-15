@@ -46,8 +46,7 @@
                 android:id="@+id/button3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="Button" />
+                android:layout_weight="0" />
         </LinearLayout>
 
         <com.google.android.material.tabs.TabLayout
@@ -97,7 +96,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|start"
         android:layout_margin="@dimen/fab_margin"
-        android:visibility="gone"
         app:fabSize="auto"
         app:srcCompat="@drawable/minus" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

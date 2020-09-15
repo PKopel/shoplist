@@ -22,11 +22,11 @@ import io.realm.mongodb.User
 import io.realm.mongodb.sync.SyncConfiguration
 
 class ShopListActivity : AppCompatActivity() {
-    private lateinit var realm: Realm
+    private var realm: Realm? = null
+    private var user: User? = null
 
     override fun onStart() {
         super.onStart()
-        var user: User? = null
         try {
             user = shopListApp.currentUser()
         } catch (e: IllegalStateException) {
@@ -40,10 +40,10 @@ class ShopListActivity : AppCompatActivity() {
                 getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE)
             val partition = preferences.getString(
                 getString(R.string.preference_partition_key),
-                getString(R.string.default_partition)
+                user?.id
             )
 
-            val config = SyncConfiguration.Builder(user, user.id)
+            val config = SyncConfiguration.Builder(user, partition)
                 .waitForInitialRemoteData()
                 .build()
 
@@ -70,24 +70,34 @@ class ShopListActivity : AppCompatActivity() {
         val fabRm: FloatingActionButton = findViewById(R.id.fab_remove)
 
         fabAdd.setOnClickListener {
-            AddDialogFragment(realm, viewPager.currentItem).show(supportFragmentManager, "add_item")
-            findViewById<RecyclerView>(R.id.item_list).adapter?.notifyDataSetChanged()
+            AddDialogFragment(realm!!, viewPager.currentItem).show(
+                supportFragmentManager,
+                "add_item"
+            )
         }
 
         fabRm.setOnClickListener {
-            realm.executeTransaction { realm ->
+            realm?.executeTransaction { realm ->
                 val itemsToRemove = realm.where<Item>().equalTo("checked", true).findAll()
-                itemsToRemove.setBoolean("removed", true)
+                itemsToRemove.deleteAllFromRealm()//.setBoolean("removed", true)
             }
-            findViewById<RecyclerView>(R.id.item_list).adapter?.notifyDataSetChanged()
-            Snackbar.make(it, R.string.remove_info, Snackbar.LENGTH_LONG)
+            val recycler = findViewById<RecyclerView>(R.id.item_list)
+            recycler.adapter?.notifyDataSetChanged()
+            Snackbar.make(recycler, resources.getText(R.string.remove_info), Snackbar.LENGTH_LONG)
                 .setAction("Remove checked", null).show()
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        user.run {
+            realm?.close()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        realm.close()
+        realm?.close()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -97,7 +107,7 @@ class ShopListActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.action_remove -> {
-            realm.executeTransaction { realm ->
+            realm?.executeTransaction { realm ->
                 val itemsToRemove = realm.where<Item>().equalTo("checked", true).findAll()
                 itemsToRemove.deleteAllFromRealm()//.setBoolean("removed", true)
             }
@@ -111,7 +121,7 @@ class ShopListActivity : AppCompatActivity() {
         R.id.action_log_out -> {
             shopListApp.currentUser()?.logOutAsync {
                 if (it.isSuccess) {
-                    realm.close()
+                    realm?.close()
                     Log.v(TAG(), "user logged out")
                     startActivity(Intent(this, LoginActivity::class.java))
                 } else {

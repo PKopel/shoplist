@@ -40,7 +40,7 @@ class ItemListAdapter(data: OrderedRealmCollection<Item>) :
             itemView.setOnClickListener {
                 run {
                     val popup = PopupMenu(holder.itemView.context, holder.view)
-                    popup.gravity = Gravity.END
+
                     val menu = popup.menu
 
                     val deleteCode = -1

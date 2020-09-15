@@ -11,5 +11,5 @@ open class Item(
     var checked: Boolean = false,
     var removed: Boolean = false,
     var shop: String = Shop.Small.name,
-    var _partition: String = "My Project",
+    var _partition: String = "def_partition",
 ) : RealmObject()

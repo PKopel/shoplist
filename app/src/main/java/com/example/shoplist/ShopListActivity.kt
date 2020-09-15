@@ -1,5 +1,6 @@
 package com.example.shoplist
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -34,7 +35,15 @@ class ShopListActivity : AppCompatActivity() {
         if (user == null) {
             startActivity(Intent(this, LoginActivity::class.java))
         } else {
-            val config = SyncConfiguration.Builder(user, "My Project")
+
+            val preferences =
+                getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE)
+            val partition = preferences.getString(
+                getString(R.string.preference_partition_key),
+                getString(R.string.default_partition)
+            )
+
+            val config = SyncConfiguration.Builder(user, user.id)
                 .waitForInitialRemoteData()
                 .build()
 

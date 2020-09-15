@@ -1,4 +1,7 @@
 <resources>
+    <string name="preference_file" translatable="false">preferences</string>
+    <string name="preference_partition_key" translatable="false">partition</string>
+    <string name="default_partition" translatable="false">def_partition</string>
     <string name="app_name">ShopList</string>
     <string name="tab_small">Small shop</string>
     <string name="tab_market">Market</string>

@@ -2,6 +2,7 @@ package com.example.shoplist.ui.main
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.R
 import com.example.shoplist.data.model.Item
 import com.example.shoplist.data.model.Shop
+import com.example.shoplist.shopListApp
 import io.realm.Realm
 
 class AddDialogFragment(private val realm: Realm, private val position: Int) : DialogFragment() {
@@ -17,6 +19,12 @@ class AddDialogFragment(private val realm: Realm, private val position: Int) : D
             val builder = AlertDialog.Builder(it)
             val inflater = requireActivity().layoutInflater
             val view = inflater.inflate(R.layout.item_form, null)
+            val preferences =
+                it.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE)
+            val partition = preferences.getString(
+                getString(R.string.preference_partition),
+                shopListApp.currentUser()!!.id
+            )
             builder.setView(view)
                 .setPositiveButton(R.string.add_button) { _, _ ->
                     val nameView = view.findViewById<TextView>(R.id.item_form_name)
@@ -28,7 +36,8 @@ class AddDialogFragment(private val realm: Realm, private val position: Int) : D
                             Item(
                                 name = name,
                                 shop = Shop.values()[position].name,
-                                qty = qty
+                                qty = qty,
+                                _partition = partition!!
                             )
                         )
                     }

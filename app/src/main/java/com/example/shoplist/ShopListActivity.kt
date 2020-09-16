@@ -1,12 +1,13 @@
 package com.example.shoplist
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.shoplist.data.model.Item
@@ -35,11 +36,11 @@ class ShopListActivity : AppCompatActivity() {
         if (user == null) {
             startActivity(Intent(this, LoginActivity::class.java))
         } else {
-
             val preferences =
-                getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE)
-            val partition = preferences.getString(
-                getString(R.string.preference_partition_key),
+                PreferenceManager.getDefaultSharedPreferences(applicationContext)
+
+            val partition = preferences?.getString(
+                getString(R.string.preference_partition),
                 user?.id
             )
 
@@ -77,15 +78,16 @@ class ShopListActivity : AppCompatActivity() {
         }
 
         fabRm.setOnClickListener {
-            realm?.executeTransaction { realm ->
-                val itemsToRemove = realm.where<Item>().equalTo("checked", true).findAll()
-                itemsToRemove.deleteAllFromRealm()//.setBoolean("removed", true)
-            }
-            val recycler = findViewById<RecyclerView>(R.id.item_list)
-            recycler.adapter?.notifyDataSetChanged()
-            Snackbar.make(recycler, resources.getText(R.string.remove_info), Snackbar.LENGTH_LONG)
-                .setAction("Remove checked", null).show()
+            removeCheckedItems()
         }
+
+        checkFabRmVisibility()
+
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        checkFabRmVisibility()
     }
 
     override fun onStop() {
@@ -107,14 +109,12 @@ class ShopListActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.action_remove -> {
-            realm?.executeTransaction { realm ->
-                val itemsToRemove = realm.where<Item>().equalTo("checked", true).findAll()
-                itemsToRemove.deleteAllFromRealm()//.setBoolean("removed", true)
-            }
-            val recycler = findViewById<RecyclerView>(R.id.item_list)
-            recycler.adapter?.notifyDataSetChanged()
-            Snackbar.make(recycler, resources.getText(R.string.remove_info), Snackbar.LENGTH_LONG)
-                .setAction("Remove checked", null).show()
+            removeCheckedItems()
+            true
+        }
+
+        R.id.action_settings -> {
+            startActivity(Intent(this, SettingsActivity::class.java))
             true
         }
 
@@ -134,5 +134,27 @@ class ShopListActivity : AppCompatActivity() {
         else -> {
             super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun removeCheckedItems() {
+        realm?.executeTransaction { realm ->
+            val itemsToRemove = realm.where<Item>().equalTo("checked", true).findAll()
+            itemsToRemove.deleteAllFromRealm()//.setBoolean("removed", true)
+        }
+        val recycler = findViewById<RecyclerView>(R.id.item_list)
+        recycler.adapter?.notifyDataSetChanged()
+        Snackbar.make(recycler, resources.getText(R.string.remove_info), Snackbar.LENGTH_LONG)
+            .setAction("Remove checked", null).show()
+    }
+
+    private fun checkFabRmVisibility() {
+        val preferences =
+            PreferenceManager.getDefaultSharedPreferences(applicationContext)
+
+        findViewById<FloatingActionButton>(R.id.fab_remove).visibility =
+            if (preferences.getBoolean(getString(R.string.preference_left_fab), true))
+                View.VISIBLE
+            else
+                View.GONE
     }
 }

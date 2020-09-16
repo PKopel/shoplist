@@ -1,25 +1,41 @@
 <resources>
+
+    <!-- Activities -->
     <string name="app_name">ShopList</string>
+    <string name="title_activity_login">Logowanie do ShopList</string>
+    <string name="title_activity_settings">Ustawienia</string>
+
+    <!-- Tabs -->
     <string name="tab_small">Mały sklep</string>
     <string name="tab_market">Market</string>
     <string name="tab_special">Specjalne</string>
+
+    <!-- New item dialog -->
     <string name="name_label">Nazwa</string>
     <string name="qty_label">Ilość</string>
     <string name="new_item">Nowa pozycja</string>
+    <string name="add_button">Dodaj</string>
+    <string name="cancel_button">Anuluj</string>
+
+    <!-- Toolbar menu -->
+    <string name="remove_info">Usunięto oznaczone pozycje</string>
+    <string name="remove">Usuń pozycję</string>
+    <string name="action_log_out">Wyloguj</string>
     <string name="action_settings">Ustawienia</string>
     <string name="action_search">Szukaj</string>
     <string name="action_remove">Usuń oznaczone pozycje</string>
-    <string name="add_button">Dodaj</string>
-    <string name="cancel_button">Anuluj</string>
-    <string name="remove_info">Usunięto oznaczone pozycje</string>
-    <string name="remove">Usuń pozycję</string>
+
+    <!-- LoginActivity -->
     <string name="prompt_password">Hasło</string>
     <string name="action_register">Rejestracja</string>
     <string name="action_sign_in">Logowanie</string>
-    <string name="action_log_out">Wyloguj</string>
     <string name="welcome">"Witaj !"</string>
     <string name="invalid_username">Niepoprawna nazwa użytkownika (powinna być adresem email)</string>
     <string name="invalid_password">Hasło musi być dłuższe niż pięć znaków</string>
     <string name="login_failed">"Logowanie nieudane"</string>
     <string name="registration_failed">"Rejestracja nieudana"</string>
+
+    <!-- Preferences -->
+    <string name="left_fab">Pokaż przycisk \"Usuń oznaczone pozycje\"</string>
+    <string name="partition">Ustawienia synchronizacj</string>
 </resources>

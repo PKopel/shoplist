@@ -1,0 +1,18 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreferenceCompat
+        app:defaultValue="true"
+        app:key="@string/preference_left_fab"
+        app:title="@string/left_fab" />
+
+    <Preference
+        app:key="@string/preference_partition"
+        app:title="@string/partition">
+        <intent
+            android:targetClass="com.example.shoplist.SettingsActivity"
+            android:targetPackage="com.example.shoplist" />
+    </Preference>
+
+
+</PreferenceScreen>

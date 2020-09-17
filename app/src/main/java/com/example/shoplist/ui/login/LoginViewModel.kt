@@ -6,8 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.shoplist.R
-import com.example.shoplist.TAG
 import com.example.shoplist.shopListApp
+import com.example.shoplist.utils.TAG
 import io.realm.mongodb.Credentials
 
 class LoginViewModel : ViewModel() {
@@ -21,7 +21,7 @@ class LoginViewModel : ViewModel() {
     fun register(username: String, password: String) {
         shopListApp.emailPasswordAuth.registerUserAsync(username, password) {
             if (!it.isSuccess) {
-                _loginResult.value = LoginResult(error = R.string.registration_failed)
+                _loginResult.value = LoginResult(error = it.error.errorMessage)
                 Log.e(TAG(), "Error: ${it.error}")
             }
         }
@@ -32,11 +32,11 @@ class LoginViewModel : ViewModel() {
         val credentials = Credentials.emailPassword(username, password)
         shopListApp.loginAsync(credentials) {
             if (!it.isSuccess) {
-                _loginResult.value = LoginResult(error = R.string.login_failed)
+                _loginResult.value = LoginResult(error = it.error.errorMessage)
                 Log.e(TAG(), "Error: ${it.error}")
             } else {
                 _loginResult.value =
-                    LoginResult(success = LoggedInUserView(displayName = it.get().name ?: ""))
+                    LoginResult(success = it.get())
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.example.shoplist
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -14,49 +15,17 @@ import com.example.shoplist.data.model.Item
 import com.example.shoplist.ui.login.LoginActivity
 import com.example.shoplist.ui.main.AddDialogFragment
 import com.example.shoplist.ui.main.SectionsPagerAdapter
+import com.example.shoplist.utils.TAG
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import io.realm.Realm
 import io.realm.kotlin.where
-import io.realm.mongodb.User
 import io.realm.mongodb.sync.SyncConfiguration
 
 class ShopListActivity : AppCompatActivity() {
     private var realm: Realm? = null
-    private var user: User? = null
-
-    override fun onStart() {
-        super.onStart()
-        try {
-            user = shopListApp.currentUser()
-        } catch (e: IllegalStateException) {
-            Log.w(TAG(), e)
-        }
-        if (user == null) {
-            startActivity(Intent(this, LoginActivity::class.java))
-        } else {
-            val preferences =
-                PreferenceManager.getDefaultSharedPreferences(applicationContext)
-
-            val partition = preferences?.getString(
-                getString(R.string.preference_partition),
-                user?.id
-            )
-
-            val config = SyncConfiguration.Builder(user, partition)
-                .waitForInitialRemoteData()
-                .build()
-
-            Realm.setDefaultConfiguration(config)
-
-            Realm.getInstanceAsync(config, object : Realm.Callback() {
-                override fun onSuccess(realm: Realm) {
-                    this@ShopListActivity.realm = realm
-                }
-            })
-        }
-    }
+    private lateinit var preferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,20 +50,42 @@ class ShopListActivity : AppCompatActivity() {
             removeCheckedItems()
         }
 
-        checkFabRmVisibility()
-
+        preferences =
+            PreferenceManager.getDefaultSharedPreferences(applicationContext)
     }
 
-    override fun onRestart() {
-        super.onRestart()
+    override fun onStart() {
+        super.onStart()
+
         checkFabRmVisibility()
+
+        val user = shopListApp.currentUser()
+
+        if (user == null) {
+            startActivity(Intent(this, LoginActivity::class.java))
+        } else {
+            val partition = preferences.getString(
+                getString(R.string.preference_partition),
+                user.id
+            )
+
+            val config = SyncConfiguration.Builder(user, partition)
+                .waitForInitialRemoteData()
+                .build()
+
+            Realm.setDefaultConfiguration(config)
+
+            Realm.getInstanceAsync(config, object : Realm.Callback() {
+                override fun onSuccess(realm: Realm) {
+                    this@ShopListActivity.realm = realm
+                }
+            })
+        }
     }
 
     override fun onStop() {
         super.onStop()
-        user.run {
-            realm?.close()
-        }
+        realm?.close()
     }
 
     override fun onDestroy() {
@@ -148,9 +139,6 @@ class ShopListActivity : AppCompatActivity() {
     }
 
     private fun checkFabRmVisibility() {
-        val preferences =
-            PreferenceManager.getDefaultSharedPreferences(applicationContext)
-
         findViewById<FloatingActionButton>(R.id.fab_remove).visibility =
             if (preferences.getBoolean(getString(R.string.preference_left_fab), true))
                 View.VISIBLE

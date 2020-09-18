@@ -34,6 +34,7 @@ class ItemListFragment : Fragment() {
                         //.equalTo("removed", false)
                         .findAll()
                 )
+                adapter?.notifyDataSetChanged()
             }
         }
         return view

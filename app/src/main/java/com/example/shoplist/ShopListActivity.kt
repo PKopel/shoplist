@@ -19,6 +19,7 @@ import com.example.shoplist.utils.TAG
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.messaging.FirebaseMessaging
 import io.realm.Realm
 import io.realm.kotlin.where
 import io.realm.mongodb.sync.SyncConfiguration
@@ -40,7 +41,7 @@ class ShopListActivity : AppCompatActivity() {
         val fabRm: FloatingActionButton = findViewById(R.id.fab_remove)
 
         fabAdd.setOnClickListener {
-            AddDialogFragment(realm!!, viewPager.currentItem).show(
+            AddDialogFragment(viewPager.currentItem).show(
                 supportFragmentManager,
                 "add_item"
             )
@@ -57,8 +58,6 @@ class ShopListActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        checkFabRmVisibility()
-
         val user = shopListApp.currentUser()
 
         if (user == null) {
@@ -66,8 +65,10 @@ class ShopListActivity : AppCompatActivity() {
         } else {
             val partition = preferences.getString(
                 getString(R.string.preference_partition),
-                user.id
-            )
+                null
+            ) ?: user.id
+
+            FirebaseMessaging.getInstance().subscribeToTopic(partition)
 
             val config = SyncConfiguration.Builder(user, partition)
                 .waitForInitialRemoteData()
@@ -81,15 +82,12 @@ class ShopListActivity : AppCompatActivity() {
                 }
             })
         }
+
+        checkFabRmVisibility()
     }
 
     override fun onStop() {
         super.onStop()
-        realm?.close()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
         realm?.close()
     }
 
@@ -110,7 +108,18 @@ class ShopListActivity : AppCompatActivity() {
         }
 
         R.id.action_log_out -> {
-            shopListApp.currentUser()?.logOutAsync {
+            val user = shopListApp.currentUser()
+            val partition = preferences.getString(
+                getString(R.string.preference_partition),
+                user?.id
+            )
+
+            if (partition != null) {
+                FirebaseMessaging.getInstance().subscribeToTopic(partition)
+            }
+
+            user?.getPush(SERVICE_NAME)?.deregisterDevice()
+            user?.logOutAsync {
                 if (it.isSuccess) {
                     realm?.close()
                     Log.v(TAG(), "user logged out")
@@ -128,15 +137,17 @@ class ShopListActivity : AppCompatActivity() {
     }
 
     private fun removeCheckedItems() {
-        realm?.executeTransaction { realm ->
-            val itemsToRemove = realm.where<Item>().equalTo("checked", true).findAll()
+        realm?.executeTransactionAsync {
+            val itemsToRemove = it.where<Item>().equalTo("checked", true).findAll()
             itemsToRemove.deleteAllFromRealm()//.setBoolean("removed", true)
         }
+
         val recycler = findViewById<RecyclerView>(R.id.item_list)
         recycler.adapter?.notifyDataSetChanged()
         Snackbar.make(recycler, resources.getText(R.string.remove_info), Snackbar.LENGTH_LONG)
             .setAction("Remove checked", null).show()
     }
+
 
     private fun checkFabRmVisibility() {
         findViewById<FloatingActionButton>(R.id.fab_remove).visibility =

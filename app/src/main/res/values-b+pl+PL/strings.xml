@@ -5,6 +5,11 @@
     <string name="title_activity_login">Logowanie do ShopList</string>
     <string name="title_activity_settings">Ustawienia</string>
 
+
+    <!-- Notifications -->
+    <string name="items_changed">pozycji zmienionych</string>
+    <string name="items_inserted">nowych pozycji</string>
+
     <!-- Tabs -->
     <string name="tab_small">Mały sklep</string>
     <string name="tab_market">Market</string>

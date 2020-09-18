@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "402720024954",
+    "firebase_url": "https://shoplist-16cb5.firebaseio.com",
+    "project_id": "shoplist-16cb5",
+    "storage_bucket": "shoplist-16cb5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:402720024954:android:f2d3d356fe44ffffdb8ec3",
+        "android_client_info": {
+          "package_name": "com.example.shoplist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "402720024954-4g02qd1toar4jsv42ccc7f8rbm9jr0kb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6OyvjkJU68-Em-10tZWolvg2QUNa8kbk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "402720024954-4g02qd1toar4jsv42ccc7f8rbm9jr0kb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -13,7 +13,7 @@ import com.example.shoplist.data.model.Shop
 import com.example.shoplist.shopListApp
 import io.realm.Realm
 
-class AddDialogFragment(private val realm: Realm, private val position: Int) : DialogFragment() {
+class AddDialogFragment(private val position: Int) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
@@ -31,20 +31,26 @@ class AddDialogFragment(private val realm: Realm, private val position: Int) : D
                     val qtyView = view.findViewById<TextView>(R.id.item_form_qty)
                     val name = nameView.text.toString()
                     val qty = Integer.parseInt(qtyView.text.toString())
-                    realm.executeTransactionAsync { realm ->
-                        realm.insert(
-                            Item(
-                                name = name,
-                                shop = Shop.values()[position].name,
-                                qty = qty,
-                                _partition = partition!!
-                            )
+                    insert(
+                        Item(
+                            name = name,
+                            shop = Shop.values()[position].name,
+                            qty = qty,
+                            _partition = partition!!
                         )
-                    }
+                    )
                     it.findViewById<RecyclerView>(R.id.item_list).adapter?.notifyDataSetChanged()
                 }
                 .setNegativeButton(R.string.cancel_button) { _, _ -> dialog?.cancel() }
             builder.create().apply { setTitle(R.string.new_item) }
         } ?: throw IllegalStateException("Activity cannot be null")
+    }
+
+    private fun insert(item: Item) {
+        val bgRealm = Realm.getDefaultInstance()
+        bgRealm?.executeTransactionAsync {
+            it.insert(item)
+        }
+        bgRealm.close()
     }
 }

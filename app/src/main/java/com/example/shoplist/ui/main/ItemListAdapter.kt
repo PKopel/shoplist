@@ -32,13 +32,12 @@ class ItemListAdapter(data: OrderedRealmCollection<Item>) :
             checkBox.isChecked = data?.checked ?: false
             checkBox.setOnCheckedChangeListener { _, _ ->
                 val bgRealm = Realm.getDefaultInstance()
-                bgRealm!!.executeTransaction {
+                bgRealm?.executeTransaction {
                     data?.checked = checkBox.isChecked
                 }
                 bgRealm.close()
             }
             itemView.setOnClickListener {
-                run {
                     val popup = PopupMenu(holder.itemView.context, holder.view)
 
                     val menu = popup.menu
@@ -55,14 +54,13 @@ class ItemListAdapter(data: OrderedRealmCollection<Item>) :
                         true
                     }
                     popup.show()
-                }
             }
         }
     }
 
     private fun removeAt(id: ObjectId) {
         val bgRealm = Realm.getDefaultInstance()
-        bgRealm!!.executeTransaction {
+        bgRealm?.executeTransactionAsync {
             val item = it.where<Item>().equalTo("_id", id).findFirst()
             item?.deleteFromRealm()
         }

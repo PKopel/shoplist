@@ -4,6 +4,13 @@
     <string name="preference_partition" translatable="false">partition</string>
     <string name="preference_left_fab" translatable="false">left_fab</string>
 
+    <!-- Notifications -->
+    <string name="channel_name" translatable="false">ShopList</string>
+    <string name="channel_description" translatable="false">ShopList app notifications</string>
+    <string name="notification_title" translatable="false">ShopList</string>
+    <string name="items_changed">items changed</string>
+    <string name="items_inserted">new items</string>
+
     <!-- Activities -->
     <string name="app_name">ShopList</string>
     <string name="title_activity_login">Log in to ShopList</string>

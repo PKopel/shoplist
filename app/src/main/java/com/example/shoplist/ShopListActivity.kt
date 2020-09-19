@@ -81,6 +81,8 @@ class ShopListActivity : AppCompatActivity() {
                     this@ShopListActivity.realm = realm
                 }
             })
+
+            findViewById<RecyclerView>(R.id.item_list)?.adapter?.notifyDataSetChanged()
         }
 
         checkFabRmVisibility()
@@ -115,7 +117,7 @@ class ShopListActivity : AppCompatActivity() {
             )
 
             if (partition != null) {
-                FirebaseMessaging.getInstance().subscribeToTopic(partition)
+                FirebaseMessaging.getInstance().unsubscribeFromTopic(partition)
             }
 
             user?.getPush(SERVICE_NAME)?.deregisterDevice()

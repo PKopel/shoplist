@@ -1,5 +1,7 @@
 package com.example.shoplist
 
+import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -7,6 +9,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
@@ -93,8 +96,13 @@ class ShopListActivity : AppCompatActivity() {
         realm?.close()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_action_bar, menu)
+
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        (menu.findItem(R.id.app_bar_search).actionView as SearchView).apply {
+            setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        }
         return true
     }
 
@@ -157,5 +165,9 @@ class ShopListActivity : AppCompatActivity() {
                 View.VISIBLE
             else
                 View.GONE
+    }
+
+    private fun doItemSearch(query: String) {
+        val item = realm?.where<Item>()?.contains("name", query)?.findFirstAsync()
     }
 }

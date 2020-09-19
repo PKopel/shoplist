@@ -29,6 +29,7 @@
     <string name="action_settings">Ustawienia</string>
     <string name="action_search">Szukaj</string>
     <string name="action_remove">Usuń oznaczone pozycje</string>
+    <string name="search_hint">Szukaj rzeczy</string>
 
     <!-- LoginActivity -->
     <string name="prompt_password">Hasło</string>

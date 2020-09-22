@@ -75,7 +75,7 @@ class ShopListActivity : AppCompatActivity() {
             partition = preferences.getString(
                 getString(R.string.preference_partition),
                 user?.id
-            ) ?: "anonymus"
+            ) ?: "anonymous"
 
             FirebaseMessaging.getInstance().subscribeToTopic(partition)
 
@@ -137,14 +137,21 @@ class ShopListActivity : AppCompatActivity() {
     private fun logOut() {
         FirebaseMessaging.getInstance().unsubscribeFromTopic(partition)
 
-        user?.getPush(SERVICE_NAME)?.deregisterDevice()
-        user?.logOutAsync {
-            if (it.isSuccess) {
-                realm?.close()
-                Log.v(TAG(), "user logged out")
-                startActivity(Intent(this, LoginActivity::class.java))
-            } else {
-                Log.e(TAG(), "log out failed! Error: ${it.error}")
+        with(preferences.edit()) {
+            remove(getString(R.string.preference_partition))
+            apply()
+        }
+
+        user?.let {
+            it.getPush(SERVICE_NAME)?.deregisterDevice()
+            it.logOutAsync { result ->
+                if (result.isSuccess) {
+                    realm?.close()
+                    Log.v(TAG(), "user logged out")
+                    startActivity(Intent(this, LoginActivity::class.java))
+                } else {
+                    Log.e(TAG(), "log out failed! Error: ${result.error}")
+                }
             }
         }
     }

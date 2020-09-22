@@ -47,10 +47,11 @@ class AddDialogFragment(private val position: Int) : DialogFragment() {
     }
 
     private fun insert(item: Item) {
-        val bgRealm = Realm.getDefaultInstance()
-        bgRealm?.executeTransactionAsync {
-            it.insert(item)
+        Realm.getDefaultInstance()?.run {
+            executeTransactionAsync {
+                it.insert(item)
+            }
+            close()
         }
-        bgRealm.close()
     }
 }

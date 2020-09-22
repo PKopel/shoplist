@@ -12,6 +12,7 @@ import com.example.shoplist.data.model.Shop
  */
 @Suppress("DEPRECATION")
 class SectionsPagerAdapter(
+    private val query: String? = null,
     private val context: Context,
     fm: FragmentManager
 ) : FragmentPagerAdapter(fm) {
@@ -19,7 +20,7 @@ class SectionsPagerAdapter(
     override fun getItem(position: Int): Fragment {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        return ItemListFragment.newInstance(position)
+        return ItemListFragment.newInstance(position, query)
     }
 
     override fun getPageTitle(position: Int): CharSequence? {

@@ -16,7 +16,7 @@ import io.realm.kotlin.where
 /**
  * A fragment containing list of items.
  */
-class ItemListFragment : Fragment() {
+class ItemListFragment(private val query: String?) : Fragment() {
 
     private val realm: Realm = Realm.getDefaultInstance()
 
@@ -31,7 +31,9 @@ class ItemListFragment : Fragment() {
                 adapter = ItemListAdapter(
                     realm.where<Item>()
                         .equalTo("shop", Shop.values()[arguments?.getInt(ARG_SHOP_TYPE) ?: 0].name)
-                        //.equalTo("removed", false)
+                        .let {
+                            if (query != null) it.contains("name", query) else it
+                        }
                         .findAll()
                 )
                 adapter?.notifyDataSetChanged()
@@ -57,8 +59,8 @@ class ItemListFragment : Fragment() {
          * number.
          */
         @JvmStatic
-        fun newInstance(sectionShop: Int): ItemListFragment {
-            return ItemListFragment().apply {
+        fun newInstance(sectionShop: Int, query: String?): ItemListFragment {
+            return ItemListFragment(query).apply {
                 arguments = Bundle().apply {
                     putInt(ARG_SHOP_TYPE, sectionShop)
                 }

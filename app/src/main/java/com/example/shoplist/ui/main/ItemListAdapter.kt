@@ -31,21 +31,19 @@ class ItemListAdapter(data: OrderedRealmCollection<Item>) :
             checkBox.setOnCheckedChangeListener(null)
             checkBox.isChecked = data?.checked ?: false
             checkBox.setOnCheckedChangeListener { _, _ ->
-                val bgRealm = Realm.getDefaultInstance()
-                bgRealm?.executeTransaction {
-                    data?.checked = checkBox.isChecked
+                Realm.getDefaultInstance()?.run {
+                    executeTransactionAsync {
+                        data?.checked = checkBox.isChecked
+                    }
+                    close()
                 }
-                bgRealm.close()
             }
             itemView.setOnClickListener {
-                    val popup = PopupMenu(holder.itemView.context, holder.view)
-
-                    val menu = popup.menu
-
+                PopupMenu(holder.itemView.context, holder.view).run {
                     val deleteCode = -1
                     menu.add(0, deleteCode, Menu.NONE, R.string.remove)
 
-                    popup.setOnMenuItemClickListener { item: MenuItem? ->
+                    setOnMenuItemClickListener { item: MenuItem? ->
                         when (item!!.itemId) {
                             deleteCode -> {
                                 removeAt(data?._id!!)
@@ -53,18 +51,20 @@ class ItemListAdapter(data: OrderedRealmCollection<Item>) :
                         }
                         true
                     }
-                    popup.show()
+                    show()
+                }
             }
         }
     }
 
     private fun removeAt(id: ObjectId) {
-        val bgRealm = Realm.getDefaultInstance()
-        bgRealm?.executeTransactionAsync {
-            val item = it.where<Item>().equalTo("_id", id).findFirst()
-            item?.deleteFromRealm()
+        Realm.getDefaultInstance()?.run {
+            executeTransactionAsync {
+                val item = it.where<Item>().equalTo("_id", id).findFirst()
+                item?.deleteFromRealm()
+            }
+            close()
         }
-        bgRealm.close()
     }
 
     class ItemListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

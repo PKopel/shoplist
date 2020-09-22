@@ -1,6 +1,7 @@
 package com.example.shoplist
 
 import android.app.SearchManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -35,7 +36,11 @@ class ShopListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shop_list)
         setSupportActionBar(findViewById(R.id.toolbar))
-        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
+        val sectionsPagerAdapter =
+            SectionsPagerAdapter(
+                context = this,
+                fm = supportFragmentManager
+            )
         val viewPager: ViewPager = findViewById(R.id.view_pager)
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = findViewById(R.id.tabs)
@@ -57,6 +62,7 @@ class ShopListActivity : AppCompatActivity() {
         preferences =
             PreferenceManager.getDefaultSharedPreferences(applicationContext)
     }
+
 
     override fun onStart() {
         super.onStart()
@@ -87,7 +93,6 @@ class ShopListActivity : AppCompatActivity() {
 
             findViewById<RecyclerView>(R.id.item_list)?.adapter?.notifyDataSetChanged()
         }
-
         checkFabRmVisibility()
     }
 
@@ -99,10 +104,12 @@ class ShopListActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_action_bar, menu)
 
+        val searchComponent = ComponentName(this, SearchActivity::class.java)
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        (menu.findItem(R.id.app_bar_search).actionView as SearchView).apply {
-            setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        (menu.findItem(R.id.app_bar_search).actionView as SearchView).run {
+            setSearchableInfo(searchManager.getSearchableInfo(searchComponent))
         }
+
         return true
     }
 
@@ -165,9 +172,5 @@ class ShopListActivity : AppCompatActivity() {
                 View.VISIBLE
             else
                 View.GONE
-    }
-
-    private fun doItemSearch(query: String) {
-        val item = realm?.where<Item>()?.contains("name", query)?.findFirstAsync()
     }
 }

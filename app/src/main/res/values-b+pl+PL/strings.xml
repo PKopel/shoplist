@@ -4,6 +4,7 @@
     <string name="app_name">ShopList</string>
     <string name="title_activity_login">Logowanie do ShopList</string>
     <string name="title_activity_settings">Ustawienia</string>
+    <string name="title_activity_search">Wyszukiwanie</string>
 
 
     <!-- Notifications -->

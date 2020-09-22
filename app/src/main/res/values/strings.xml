@@ -15,6 +15,7 @@
     <string name="app_name">ShopList</string>
     <string name="title_activity_login">Log in to ShopList</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_search">Search</string>
 
     <!-- Tabs -->
     <string name="tab_small">Small shop</string>

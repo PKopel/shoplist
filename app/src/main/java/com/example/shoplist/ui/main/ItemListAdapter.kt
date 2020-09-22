@@ -31,12 +31,11 @@ class ItemListAdapter(data: OrderedRealmCollection<Item>) :
             checkBox.setOnCheckedChangeListener(null)
             checkBox.isChecked = data?.checked ?: false
             checkBox.setOnCheckedChangeListener { _, _ ->
-                Realm.getDefaultInstance()?.run {
-                    executeTransactionAsync {
-                        data?.checked = checkBox.isChecked
-                    }
-                    close()
+                val bgRealm = Realm.getDefaultInstance()
+                bgRealm?.executeTransaction {
+                    data?.checked = checkBox.isChecked
                 }
+                bgRealm.close()
             }
             itemView.setOnClickListener {
                 PopupMenu(holder.itemView.context, holder.view).run {

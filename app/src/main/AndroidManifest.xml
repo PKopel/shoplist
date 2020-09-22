@@ -26,16 +26,17 @@
         </service>
 
         <activity
+            android:name=".ui.login.LoginActivity"
+            android:label="@string/title_activity_login" />
+        <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".ShopListActivity" />
         <activity
-            android:name=".ui.login.LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity
             android:name=".SearchActivity"
             android:label="@string/title_activity_search"
-            android:parentActivityName=".ShopListActivity">
+            android:parentActivityName=".ShopListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>

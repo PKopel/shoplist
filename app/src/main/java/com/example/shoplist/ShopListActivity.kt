@@ -26,10 +26,13 @@ import com.google.android.material.tabs.TabLayout
 import com.google.firebase.messaging.FirebaseMessaging
 import io.realm.Realm
 import io.realm.kotlin.where
+import io.realm.mongodb.User
 import io.realm.mongodb.sync.SyncConfiguration
 
 class ShopListActivity : AppCompatActivity() {
     private var realm: Realm? = null
+    private var user: User? = shopListApp.currentUser()
+    private lateinit var partition: String
     private lateinit var preferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,16 +69,13 @@ class ShopListActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-
-        val user = shopListApp.currentUser()
-
         if (user == null) {
             startActivity(Intent(this, LoginActivity::class.java))
         } else {
-            val partition = preferences.getString(
+            partition = preferences.getString(
                 getString(R.string.preference_partition),
-                null
-            ) ?: user.id
+                user?.id
+            ) ?: "anonymus"
 
             FirebaseMessaging.getInstance().subscribeToTopic(partition)
 
@@ -92,8 +92,8 @@ class ShopListActivity : AppCompatActivity() {
             })
 
             findViewById<RecyclerView>(R.id.item_list)?.adapter?.notifyDataSetChanged()
+            checkFabRmVisibility()
         }
-        checkFabRmVisibility()
     }
 
     override fun onStop() {
@@ -125,31 +125,27 @@ class ShopListActivity : AppCompatActivity() {
         }
 
         R.id.action_log_out -> {
-            val user = shopListApp.currentUser()
-            val partition = preferences.getString(
-                getString(R.string.preference_partition),
-                user?.id
-            )
-
-            if (partition != null) {
-                FirebaseMessaging.getInstance().unsubscribeFromTopic(partition)
-            }
-
-            user?.getPush(SERVICE_NAME)?.deregisterDevice()
-            user?.logOutAsync {
-                if (it.isSuccess) {
-                    realm?.close()
-                    Log.v(TAG(), "user logged out")
-                    startActivity(Intent(this, LoginActivity::class.java))
-                } else {
-                    Log.e(TAG(), "log out failed! Error: ${it.error}")
-                }
-            }
+            logOut()
             true
         }
 
         else -> {
             super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun logOut() {
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(partition)
+
+        user?.getPush(SERVICE_NAME)?.deregisterDevice()
+        user?.logOutAsync {
+            if (it.isSuccess) {
+                realm?.close()
+                Log.v(TAG(), "user logged out")
+                startActivity(Intent(this, LoginActivity::class.java))
+            } else {
+                Log.e(TAG(), "log out failed! Error: ${it.error}")
+            }
         }
     }
 
@@ -168,9 +164,7 @@ class ShopListActivity : AppCompatActivity() {
 
     private fun checkFabRmVisibility() {
         findViewById<FloatingActionButton>(R.id.fab_remove).visibility =
-            if (preferences.getBoolean(getString(R.string.preference_left_fab), true))
-                View.VISIBLE
-            else
-                View.GONE
+            if (preferences.getBoolean(getString(R.string.preference_left_fab), true)) View.VISIBLE
+            else View.GONE
     }
 }

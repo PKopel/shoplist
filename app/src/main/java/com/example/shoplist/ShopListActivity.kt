@@ -31,7 +31,7 @@ import io.realm.mongodb.sync.SyncConfiguration
 
 class ShopListActivity : AppCompatActivity() {
     private var realm: Realm? = null
-    private var user: User? = shopListApp.currentUser()
+    private var user: User? = null
     private lateinit var partition: String
     private lateinit var preferences: SharedPreferences
 
@@ -69,6 +69,7 @@ class ShopListActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        user = shopListApp.currentUser()
         if (user == null) {
             startActivity(Intent(this, LoginActivity::class.java))
         } else {
@@ -91,7 +92,6 @@ class ShopListActivity : AppCompatActivity() {
                 }
             })
 
-            findViewById<RecyclerView>(R.id.item_list)?.adapter?.notifyDataSetChanged()
             checkFabRmVisibility()
         }
     }
@@ -143,7 +143,10 @@ class ShopListActivity : AppCompatActivity() {
         }
 
         user?.let {
-            it.getPush(SERVICE_NAME)?.deregisterDevice()
+            it.getPush(SERVICE_NAME)?.deregisterDeviceAsync { result ->
+                if (result.isSuccess) Log.v(TAG(), "device deregistered")
+                else Log.v(TAG(), "error while deregistering device")
+            }
             it.logOutAsync { result ->
                 if (result.isSuccess) {
                     realm?.close()

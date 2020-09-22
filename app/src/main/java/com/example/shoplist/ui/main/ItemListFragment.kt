@@ -16,7 +16,7 @@ import io.realm.kotlin.where
 /**
  * A fragment containing list of items.
  */
-class ItemListFragment(private val query: String?) : Fragment() {
+class ItemListFragment(private val query: String? = null) : Fragment() {
 
     private val realm: Realm = Realm.getDefaultInstance()
 
